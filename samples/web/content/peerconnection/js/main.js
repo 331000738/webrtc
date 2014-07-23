@@ -18,13 +18,13 @@ var startTime;
 var localVideo = document.getElementById('localVideo');
 var remoteVideo = document.getElementById('remoteVideo');
 
-localVideo.addEventListener('loadedmetadata', function () {
+attachEventListener(localVideo, 'loadedmetadata', function () {
   trace('Local video currentSrc: ' + this.currentSrc +
     ', videoWidth: ' + this.videoWidth +
     'px,  videoHeight: ' + this.videoHeight + 'px');
 });
 
-remoteVideo.addEventListener('loadedmetadata', function () {
+attachEventListener(remoteVideo, 'loadedmetadata', function () {
   trace('Remote video currentSrc: ' + this.currentSrc +
     ', videoWidth: ' + this.videoWidth +
     'px,  videoHeight: ' + this.videoHeight + 'px');

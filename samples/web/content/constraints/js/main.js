@@ -130,10 +130,10 @@ function createPeerConnection() {
   remotePeerConnection = new RTCPeerConnection(null);
   localPeerConnection.addStream(localStream, addStreamConstraints());
   console.log('localPeerConnection creating offer');
-  localPeerConnection.onnegotiationeeded = function () {
+  localPeerConnection.onnegotiationneeded = function () {
     console.log('Negotiation needed - localPeerConnection');
   };
-  remotePeerConnection.onnegotiationeeded = function () {
+  remotePeerConnection.onnegotiationneeded = function () {
     console.log('Negotiation needed - remotePeerConnection');
   };
   localPeerConnection.onicecandidate = function (e) {
@@ -215,7 +215,8 @@ setInterval(function () {
 
   //  display('No stream');
   if (remotePeerConnection && remotePeerConnection.getRemoteStreams()[0]) {
-    if (remotePeerConnection.getStats) {
+      // If "IE" compatiblity mode is OFF then, "!!remotePeerConnection.getStats" will reture false
+      if (remotePeerConnection.getStats || typeof remotePeerConnection.getStats !=='undefined') {
       remotePeerConnection.getStats(function (rawStats) {
         var stats = new AugumentedStatsResponse(rawStats);
         var statsString = '';
@@ -326,7 +327,7 @@ function dumpStats(obj) {
     statsString += ' type ';
     statsString += obj.type;
   }
-  if (obj.names) {
+  if (obj.names || typeof obj.names !== 'undefined') {
     var names = obj.names();
     for (var i = 0; i < names.length; ++i) {
       statsString += '<br>';

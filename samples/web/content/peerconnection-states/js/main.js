@@ -73,7 +73,7 @@ function call() {
     pc1.onstatechange = stateCallback1;
   }
   pc1IceStateDiv.textContent = pc1.iceConnectionState;
-  if (pc1.oniceconnectionstatechange) {
+  if (pc1.oniceconnectionstatechange || typeof pc1.oniceconnectionstatechange !== 'undefined') {
     pc1.oniceconnectionstatechange = iceStateCallback1;
   } else {
     pc1.onicechange = iceStateCallback1;
@@ -83,7 +83,7 @@ function call() {
   pc2 = new RTCPeerConnection(servers, pcConstraints);
   trace('Created remote peer connection object pc2');
   pc2StateDiv.textContent = pc2.signalingState || pc2.readyState;
-  if (pc2.onsignalingstatechange) {
+  if (pc2.onsignalingstatechange || typeof pc2.onsignalingstatechange !== 'undefined') {
     pc2.onsignalingstatechange = stateCallback2;
   } else {
     pc2.onstatechange = stateCallback2;
@@ -131,6 +131,7 @@ function hangup() {
   pc2 = null;
   hangupButton.disabled = true;
   callButton.disabled = false;
+  attachMediaStream(video2, null);
 }
 
 function gotRemoteStream(e){

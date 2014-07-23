@@ -16,8 +16,13 @@ navigator.getUserMedia = navigator.getUserMedia ||
   navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
 function successCallback(stream) {
-  window.stream = stream; // stream available to console
-  video.src = window.URL.createObjectURL(stream);
+    window.stream = stream; // stream available to console
+    video = attachMediaStream(video, stream); // issue in IE (not in our code): refCount increment twice. Do not override "video" to fix the issue.
+    attachEventListener(video, 'play', function () {
+        setTimeout(function () {
+            displayVideoDimensions();
+        }, 500);
+    });
 }
 
 function errorCallback(error){
@@ -28,12 +33,6 @@ function displayVideoDimensions() {
   dimensions.innerHTML = "Actual video dimensions: " + video.videoWidth +
     "x" + video.videoHeight + 'px.';
 }
-
-video.addEventListener('play', function(){
-  setTimeout(function(){
-    displayVideoDimensions();
-  }, 500);
-});
 
 var qvgaConstraints  = {
   video: {
@@ -68,7 +67,7 @@ hdButton.onclick = function(){getMedia(hdConstraints)};
 
 function getMedia(constraints){
   if (!!stream) {
-    video.src = null;
+    attachMediaStream(video, null);
     stream.stop();
   }
   navigator.getUserMedia(constraints, successCallback, errorCallback);

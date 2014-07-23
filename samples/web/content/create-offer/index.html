@@ -50,18 +50,25 @@ var video = document.getElementById('video');
 var vad = document.getElementById('vad');
 var restart = document.getElementById('restart');
 var output = document.getElementById('output');
-var pc = new RTCPeerConnection(null);
-var wacx = new webkitAudioContext();
+var pc;
+var wacx;
+
+window.onload = function () {
+    pc = new RTCPeerConnection(null);
+    if (window.webkitAudioContext) {
+        wacx = new webkitAudioContext();
+    }
+}
 
 function createOffer() {
   var numRequestedAudioTracks = numAudioTracks.value;
   while (numRequestedAudioTracks < pc.getLocalStreams().length) {
     pc.removeStream(pc.getLocalStreams()[pc.getLocalStreams().length - 1]);
   }
-  while (numRequestedAudioTracks > pc.getLocalStreams().length) {
+  while (wacx && numRequestedAudioTracks > pc.getLocalStreams().length) {
     // Create some dummy audio streams using Web Audio.
     // Note that this fails if you try to do more than one track in Chrome
-    // right now.
+      // right now.
     var dst = wacx.createMediaStreamDestination();
     pc.addStream(dst.stream);
   }
