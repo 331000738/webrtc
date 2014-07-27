@@ -248,6 +248,7 @@ if (navigator.mozGetUserMedia) {
         pluginObj.setAttribute('height', '0');
 
         if (pluginObj.isWebRtcPlugin || (typeof navigator.plugins !== "undefined" && !!navigator.plugins["WebRTC Everywhere"])) {
+            console.log("Plugin version: " + pluginObj.versionName + ", adapter version: 1.1.0");
             if (isInternetExplorer) {
                 console.log("This appears to be Internet Explorer");
                 webrtcDetectedBrowser = "Internet Explorer";
@@ -362,10 +363,22 @@ if (navigator.mozGetUserMedia) {
             drawImage = function (context, video, x, y, width, height) {
                 var pluginObj = extractPluginObj(video);
                 if (pluginObj && pluginObj.isWebRtcPlugin && pluginObj.videoWidth > 0 && pluginObj.videoHeight > 0) {
-                    var imageData = context.createImageData(pluginObj.videoWidth, pluginObj.videoHeight);
-                    if (imageData) {
-                        pluginObj.fillImageData(imageData);
-                        context.putImageData(imageData, x, y/*, width, height*/);
+                    if (typeof pluginObj.getScreenShot !== "undefined") {
+                        var bmpBase64 = pluginObj.getScreenShot();
+                        if (bmpBase64) {
+                            var image = new Image();
+                            image.onload = function () {
+                                context.drawImage(image, 0, 0, width, height);
+                            };
+                            image.src = "data:image/png;base64," + bmpBase64;
+                        }
+                    }
+                    else {
+                        var imageData = context.createImageData(pluginObj.videoWidth, pluginObj.videoHeight);
+                        if (imageData) {
+                            pluginObj.fillImageData(imageData);
+                            context.putImageData(imageData, x, y/*, width, height*/);
+                        }
                     }
                 }
             }
