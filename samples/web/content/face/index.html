@@ -83,7 +83,7 @@ poll = function() {
   canvas.width  = w;
   canvas.height = h;
   var ctx = canvas.getContext('2d');
-  ctx.drawImage(localVideo, 0, 0, w, h);
+  drawImage(ctx, localVideo, 0, 0, w, h);
   var comp = ccv.detect_objects({ "canvas" : ccv.grayscale(canvas),
                     "cascade" : cascade,
                     "interval" : 5,
@@ -131,7 +131,7 @@ poll = function() {
 
 onGotStream = function(stream) {
   localVideo.style.opacity = 1;
-  attachMediaStream(localVideo, stream);
+  localVideo = attachMediaStream(localVideo, stream);
   localStream = stream;
 
   //trace("User has granted access to local media. url = " + url);
