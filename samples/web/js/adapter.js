@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2014 The WebRTC project authors. All Rights Reserved.
+ *  Copyright (c) 2014 Doubango Telecom. All Rights Reserved.
  *
  *  Use of this source code is governed by a BSD-style license
  *  that can be found in the LICENSE file in the root of the source
@@ -251,8 +252,8 @@ if (navigator.mozGetUserMedia) {
         pluginObj.setAttribute('width', '0');
         pluginObj.setAttribute('height', '0');
 
-        if (pluginObj.isWebRtcPlugin || (typeof navigator.plugins !== "undefined" && !!navigator.plugins["WebRTC Everywhere"])) {
-            console.log("Plugin version: " + pluginObj.versionName + ", adapter version: 1.1.0");
+        if (pluginObj.isWebRtcPlugin || (typeof navigator.plugins !== "undefined" && (!!navigator.plugins["WebRTC Everywhere"] || navigator.plugins["WebRTC Everywhere Plug-in for Safari"]))) {
+            console.log("Plugin version: " + pluginObj.versionName + ", adapter version: 1.2.0");
             if (isInternetExplorer) {
                 console.log("This appears to be Internet Explorer");
                 webrtcDetectedBrowser = "Internet Explorer";
