@@ -127,7 +127,7 @@ function gotRemoteStream(e) {
   // Call the polyfill wrapper to attach the media stream to this element.
   attachMediaStream(audio, e.stream);
   trace('Received remote stream');
-  if (pc1.createDTMFSender) {
+  if (typeof pc1.createDTMFSender !== "undefined") {
     enableDtmfSender();
   } else {
     alert('This demo requires the RTCPeerConnection method createDTMFSender() which is not support by this browser.');
@@ -174,7 +174,7 @@ function enableDtmfSender() {
 function dtmfOnToneChange(tone) {
   if (tone) {
     trace('Sent DTMF tone: ' + tone.tone);
-    sentTonesDiv.textContent += tone.tone + ' ';
+    sentTonesDiv.textContent += tone.tone.toString() + ' ';
   }
 }
 

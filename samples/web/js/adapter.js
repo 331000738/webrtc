@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2014 The WebRTC project authors. All Rights Reserved.
- *  Copyright (c) 2014 Doubango Telecom. All Rights Reserved.
+ *  Copyright (c) 2014-2015 Doubango Telecom. All Rights Reserved.
  *
  *  Use of this source code is governed by a BSD-style license
  *  that can be found in the LICENSE file in the root of the source
@@ -211,6 +211,19 @@ if (navigator.mozGetUserMedia) {
     var console = console || {
         "log": function(msg) {}
     };
+    var createIceServer = function (url, username, password) {
+        var url_parts = url.split(':');
+        if (url_parts[0].indexOf('stun') === 0) {
+            return { 'url': url };
+        } else if (url_parts[0].indexOf('turn') === 0) {
+            return {
+                'url': url,
+                'credential': password,
+                'username': username
+            };
+        }
+        return null;
+    };
     var extractPluginObj = function (elt) {
         return elt.isWebRtcPlugin ? elt : elt.pluginObj;
     }
@@ -253,7 +266,7 @@ if (navigator.mozGetUserMedia) {
         pluginObj.setAttribute('height', '0');
 
         if (pluginObj.isWebRtcPlugin || (typeof navigator.plugins !== "undefined" && (!!navigator.plugins["WebRTC Everywhere"] || navigator.plugins["WebRTC Everywhere Plug-in for Safari"]))) {
-            console.log("Plugin version: " + pluginObj.versionName + ", adapter version: 1.2.0");
+            console.log("Plugin version: " + pluginObj.versionName + ", adapter version: 1.2.1");
             if (isInternetExplorer) {
                 console.log("This appears to be Internet Explorer");
                 webrtcDetectedBrowser = "Internet Explorer";
