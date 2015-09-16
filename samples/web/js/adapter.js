@@ -266,7 +266,7 @@ if (navigator.mozGetUserMedia) {
         pluginObj.setAttribute('height', '0');
 
         if (pluginObj.isWebRtcPlugin || (typeof navigator.plugins !== "undefined" && (!!navigator.plugins["WebRTC Everywhere"] || navigator.plugins["WebRTC Everywhere Plug-in for Safari"]))) {
-            console.log("Plugin version: " + pluginObj.versionName + ", adapter version: 1.2.1");
+            console.log("Plugin version: " + pluginObj.versionName + ", adapter version: 1.3.1");
             if (isInternetExplorer) {
                 console.log("This appears to be Internet Explorer");
                 webrtcDetectedBrowser = "Internet Explorer";
@@ -317,7 +317,7 @@ if (navigator.mozGetUserMedia) {
         }
     }
 
-    attachMediaStream = function (element, stream) {
+    attachMediaStream = function(element, stream) {
         console.log("Attaching media stream");
         if (element.isWebRtcPlugin) {
             element.src = stream;
@@ -328,6 +328,11 @@ if (navigator.mozGetUserMedia) {
                 var _pluginObj = document.createElement('object');
                 var _isIE = (Object.getOwnPropertyDescriptor && Object.getOwnPropertyDescriptor(window, "ActiveXObject")) || ("ActiveXObject" in window);
                 if (_isIE) {
+                    // windowless
+                    var windowlessParam = document.createElement("param");
+                    windowlessParam.setAttribute('name', 'windowless');
+                    windowlessParam.setAttribute('value', true);   
+                    _pluginObj.appendChild(windowlessParam);
                     _pluginObj.setAttribute('classid', 'CLSID:7FD49E23-C8D7-4C4F-93A1-F7EACFA1EC53');
                 } else {
                     _pluginObj.setAttribute('type', 'application/webrtc-everywhere');
@@ -366,7 +371,7 @@ if (navigator.mozGetUserMedia) {
             }
 
             if (element.pluginObj) {
-                element.pluginObj.bindEventListener('play', function (objvid) {
+                element.pluginObj.bindEventListener('play', function(objvid) {
                     if (element.pluginObj) {
                         if (element.pluginObj.getAttribute("autowidth") && objvid.videoWidth) {
                             element.pluginObj.setAttribute('width', objvid.videoWidth/* + "px"*/);
