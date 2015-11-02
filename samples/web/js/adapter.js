@@ -319,6 +319,9 @@ if (navigator.mozGetUserMedia) {
 
     attachMediaStream = function(element, stream) {
         console.log("Attaching media stream");
+        if (!element) {
+            return null;
+        }
         if (element.isWebRtcPlugin) {
             element.src = stream;
             return element;
@@ -331,7 +334,7 @@ if (navigator.mozGetUserMedia) {
                     // windowless
                     var windowlessParam = document.createElement("param");
                     windowlessParam.setAttribute('name', 'windowless');
-                    windowlessParam.setAttribute('value', true);   
+                    windowlessParam.setAttribute('value', true);
                     _pluginObj.appendChild(windowlessParam);
                     _pluginObj.setAttribute('classid', 'CLSID:7FD49E23-C8D7-4C4F-93A1-F7EACFA1EC53');
                 } else {
